@@ -27,7 +27,7 @@ class RecipesHome(DataMixin, ListView):
 
 
 
-class ShowPost(DataMixin,  DetailView):
+class ShowPost(DataMixin, DetailView):
     model = Recipes
     template_name = 'recipes_app/post.html'
     slug_url_kwarg = 'post_slug'
@@ -36,4 +36,14 @@ class ShowPost(DataMixin,  DetailView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title=context['post'])
+        return context | c_def
+
+class RecipesCategory(DataMixin,  ListView):
+    model = Recipes
+    template_name = 'recipes_app/index.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat))
         return context | c_def
